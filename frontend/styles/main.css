@@ -1,0 +1,1744 @@
+/* ==================================================
+   01 / Farben, Abstände und Grundeinstellungen
+   ================================================== */
+
+:root {
+  --bg: #101111;
+  --white: #efefea;
+  --red: #f03235;
+  --muted: #999c98;
+  --line: #ffffff2b;
+  --pad: 4.4vw;
+  --head: 76px;
+  --admin-offset: 0px;
+  --work-width: 1440px;
+}
+
+/* ==================================================
+   02 / Allgemeine Elemente und Tastaturfokus
+   ================================================== */
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--head) + var(--admin-offset));
+  scrollbar-gutter: stable;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--white);
+  font:
+    14px/1.5 Inter,
+    Arial,
+    sans-serif;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+body.admin-bar {
+  --admin-offset: 32px;
+}
+body.modal-open {
+  overflow: hidden;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.track:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 5px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+h1,
+h2,
+h3,
+p,
+figure {
+  margin: 0;
+}
+em {
+  font-style: normal;
+  color: var(--red);
+}
+[hidden] {
+  display: none !important;
+}
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: -100px;
+  z-index: 99999;
+  background: var(--white);
+  color: var(--bg);
+  padding: 12px;
+}
+.skip-link:focus {
+  top: calc(var(--admin-offset) + 8px);
+}
+
+/* ==================================================
+   03 / Navigation und Logo
+   ================================================== */
+
+.site-header {
+  height: var(--head);
+  position: fixed;
+  inset: var(--admin-offset) 0 auto;
+  z-index: 20;
+  background: linear-gradient(#0c0d0dec, #0c0d0da0);
+  backdrop-filter: blur(12px);
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  gap: 25px;
+}
+.logo {
+  font:
+    800 38px/1 'Barlow Condensed',
+    Impact,
+    sans-serif;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+}
+.logo span,
+.red,
+h2 > span {
+  color: var(--red);
+}
+.site-header nav {
+  display: flex;
+  gap: 36px;
+  font-size: 12px;
+  align-items: center;
+  overflow: auto;
+  white-space: nowrap;
+}
+.site-header nav a {
+  padding: 12px 0;
+}
+.site-header nav a:hover {
+  color: var(--red);
+}
+
+/* ==================================================
+   04 / Einstieg mit Hintergrundbild und Titel
+   ================================================== */
+
+.hero {
+  height: 100svh;
+  min-height: 660px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-art {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 77%;
+  height: 100%;
+  filter: brightness(0.65);
+  mask-image: linear-gradient(90deg, transparent, #000 16%);
+}
+.default-hero {
+  background: radial-gradient(ellipse at 65% 45%, #242827, #101111 72%);
+}
+.custom-hero {
+  object-fit: cover;
+}
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, #0e1010, #0e1010c9 22%, #0e101020 72%),
+    linear-gradient(0deg, #101111, transparent 35%, #0e101040);
+}
+.hero-motion .hero-art {
+  transform: translate3d(var(--hero-x, 0px), var(--hero-y, 0px), 0) scale(1.045);
+  will-change: transform;
+}
+.hero-video {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.hero-video.is-visible {
+  opacity: 1;
+}
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .hero-spotlight .hero-art {
+    filter: brightness(0.95);
+  }
+  .hero-spotlight .hero-glow {
+    opacity: 1;
+  }
+}
+.hero-glow::before,
+.hero-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.hero-glow::before {
+  background: rgb(0 0 0 / 62%);
+}
+.hero-glow::after {
+  opacity: 0;
+  background: radial-gradient(
+    circle clamp(170px, 22vw, 320px) at var(--glow-x, 70%) var(--glow-y, 50%),
+    rgb(255 255 255 / 3.5%) 0%,
+    transparent 22%,
+    rgb(0 0 0 / 16%) 50%,
+    rgb(0 0 0 / 62%) 100%
+  );
+}
+.glow-active .hero-glow::before {
+  opacity: 0;
+}
+.glow-active .hero-glow::after {
+  opacity: 1;
+}
+.hero-video-toggle {
+  position: absolute;
+  z-index: 3;
+  top: calc(var(--head) + var(--admin-offset) + 18px);
+  right: var(--pad);
+  padding: 10px 14px;
+  border: 1px solid #ffffff50;
+  background: #101111b3;
+  font: 9px/1.5 'IBM Plex Mono', monospace;
+}
+.hero-video-toggle:hover {
+  background: #101111;
+}
+.hero-copy {
+  position: relative;
+  padding: clamp(150px, 23vh, 220px) var(--pad) 0;
+  z-index: 2;
+}
+.eyebrow {
+  font:
+    10px/1.6 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+}
+.eyebrow i {
+  width: 6px;
+  height: 6px;
+  display: block;
+  background: var(--red);
+  box-shadow: 0 0 15px var(--red);
+}
+h1 {
+  font:
+    800 clamp(70px, 9.7vw, 158px)/0.85 'Barlow Condensed',
+    Impact,
+    sans-serif;
+  letter-spacing: -0.025em;
+  margin-bottom: 30px;
+  overflow-wrap: anywhere;
+}
+.intro {
+  max-width: 46ch;
+  line-height: 1.7;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+.button {
+  background: transparent;
+  border: 1px solid #c9c9c9;
+  display: inline-flex;
+  gap: 48px;
+  align-items: center;
+  padding: 17px 22px;
+  font:
+    11px/1.3 'IBM Plex Mono',
+    monospace;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.button:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+.button span {
+  font-size: 21px;
+}
+.hero-bottom {
+  position: absolute;
+  z-index: 2;
+  bottom: 28px;
+  left: var(--pad);
+  right: var(--pad);
+  display: flex;
+  justify-content: space-between;
+  font:
+    9px/1.6 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 1.5px;
+  align-items: center;
+  gap: 18px;
+}
+.down {
+  display: inline-block;
+  color: var(--red);
+  font-size: 24px;
+  margin-left: 20px;
+}
+
+/* ==================================================
+   05 / Projektreihen und horizontale Galerien
+   ================================================== */
+
+.project-row {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  padding-top: 64px;
+  position: relative;
+}
+.project-row.alternate {
+  background: #181919;
+}
+.section-head {
+  width: calc(100% - 2 * var(--pad));
+  max-width: var(--work-width);
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 26px;
+}
+.section-head .eyebrow {
+  margin-bottom: 12px;
+}
+.section-head h2 {
+  font:
+    700 clamp(38px, 4.4vw, 75px)/0.95 'Barlow Condensed',
+    Impact,
+    sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  overflow-wrap: anywhere;
+}
+.section-note {
+  font:
+    9px/1.8 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 1px;
+  text-align: right;
+  color: #aaa;
+  max-width: 280px;
+}
+.track {
+  display: flex;
+  gap: 26px;
+  width: calc(100% - 2 * var(--pad));
+  max-width: var(--work-width);
+  margin-inline: auto;
+  padding: 0 0 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red) #2a2a2a;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+  cursor: grab;
+}
+.track.dragging,
+.track.dragging .project {
+  cursor: grabbing;
+}
+.track.dragging {
+  -webkit-user-select: none;
+  user-select: none;
+}
+.project {
+  display: flex;
+  flex-direction: column;
+  width: calc((100% - 26px) / 2);
+  flex-shrink: 0;
+  min-width: 0;
+  text-align: left;
+  -webkit-user-drag: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .project {
+    cursor: grab;
+  }
+  .project:active {
+    cursor: grabbing;
+  }
+}
+.project-img {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #202222;
+}
+.card-media,
+.card-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    transform 0.6s,
+    opacity 0.3s;
+}
+.card-media {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.fit-contain .card-media,
+.fit-contain .card-preview {
+  object-fit: contain;
+  background: #090c10;
+}
+.card-preview {
+  opacity: 0;
+  pointer-events: none;
+}
+.preview-playing .card-preview {
+  opacity: 1;
+}
+.project:hover .card-media {
+  transform: scale(1.02);
+}
+.project-img:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(0deg, #000b, transparent 38%);
+}
+.image-index {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+  font:
+    9px/1.6 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 1px;
+  z-index: 2;
+  max-width: 75%;
+}
+.media-label {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 3;
+  border: 1px solid #ffffff70;
+  padding: 9px 11px;
+  font:
+    8px/1.3 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 1px;
+  background: #10111190;
+}
+.open {
+  position: absolute;
+  right: 20px;
+  bottom: 15px;
+  font-size: 30px;
+  z-index: 2;
+}
+.image-placeholder {
+  padding: 40px;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  font:
+    700 4vw 'Barlow Condensed',
+    Impact,
+    sans-serif;
+  opacity: 0.5;
+}
+.caption {
+  padding-top: 17px;
+}
+.caption h3 {
+  font:
+    600 clamp(23px, 2.3vw, 36px)/1.1 'Barlow Condensed',
+    Impact,
+    sans-serif;
+  text-transform: uppercase;
+}
+.caption p {
+  font:
+    10px/1.6 'IBM Plex Mono',
+    monospace;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.section-foot {
+  width: calc(100% - 2 * var(--pad));
+  max-width: var(--work-width);
+  margin-inline: auto;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0 32px;
+  font:
+    9px/1.5 'IBM Plex Mono',
+    monospace;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.section-foot > span {
+  white-space: nowrap;
+}
+.progress {
+  height: 1px;
+  flex: 1;
+  background: #ffffff20;
+  overflow: hidden;
+}
+.progress i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.gallery-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.gallery-controls button {
+  background: transparent;
+  border: 1px solid #ffffff45;
+  padding: 11px 15px;
+  min-height: 44px;
+  font:
+    11px 'IBM Plex Mono',
+    monospace;
+}
+.gallery-controls button:hover:not(:disabled) {
+  background: var(--red);
+  border-color: var(--red);
+}
+.gallery-controls button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.gallery-hint {
+  padding-left: 14px;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+/* ==================================================
+   06 / Grössere Bild- und Videovorschau an der Maus
+   ================================================== */
+
+.cursor-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  width: min(760px, 74vw);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  background: #101111;
+  border: 1px solid #ffffff45;
+  border-bottom: 2px solid var(--red);
+  box-shadow: 0 25px 100px #0009;
+  transition: opacity 0.16s ease;
+  will-change: transform;
+  contain: layout style;
+}
+.cursor-preview.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+.cursor-preview-media {
+  position: relative;
+  height: min(55svh, 460px);
+  background: #090b0c;
+}
+.cursor-preview-media img,
+.cursor-preview-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cursor-preview.fit-contain img,
+.cursor-preview.fit-contain video {
+  object-fit: contain;
+}
+.cursor-preview-media video {
+  opacity: 0;
+}
+.cursor-preview.is-playing video {
+  opacity: 1;
+}
+.cursor-preview-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 20px;
+}
+.cursor-preview-caption > div {
+  min-width: 0;
+}
+.cursor-preview-caption strong {
+  display: block;
+  font: 700 28px/1.1 'Barlow Condensed', Impact, sans-serif;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cursor-preview-caption span {
+  display: block;
+  font: 9px/1.5 'IBM Plex Mono', monospace;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.cursor-preview-caption i {
+  font: normal 30px/1 Inter, sans-serif;
+}
+@media (hover: none), (pointer: coarse), (max-width: 899px) {
+  .cursor-preview {
+    display: none;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .motion-arrows .button > span,
+  .motion-arrows .email-link::after,
+  .motion-arrows .project .open {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+  .motion-arrows .button:is(:hover, :focus-visible) > span,
+  .motion-arrows .email-link:is(:hover, :focus-visible)::after,
+  .motion-arrows .project:is(:hover, :focus-visible) .open {
+    transform: translate(4px, -4px);
+  }
+}
+
+/* ==================================================
+   07 / Über mich: Text, Programme, Porträt und 3D
+   ================================================== */
+
+.interests {
+  overflow: clip;
+  padding: 104px var(--pad) 64px;
+  border-top: 1px solid var(--line);
+  background: #121313;
+}
+.interest-eyebrow {
+  max-width: 1240px;
+  margin-inline: auto;
+  margin-bottom: 28px;
+}
+.interest {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  align-items: center;
+  gap: clamp(32px, 6vw, 90px);
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding: clamp(88px, 10vh, 140px) 0;
+}
+.interest + .interest {
+  border-top: 1px solid var(--line);
+}
+.interest-copy {
+  min-width: 0;
+}
+.interest-number {
+  display: block;
+  margin-bottom: 18px;
+  color: var(--muted);
+  font: 10px/1 'IBM Plex Mono', monospace;
+  letter-spacing: 2px;
+}
+.interest h2 {
+  margin-bottom: 25px;
+  font: 800 clamp(42px, 5.2vw, 82px)/1.02 'Barlow Condensed', Impact, sans-serif;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.interest-title-line {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0 .035em .06em 0;
+  color: var(--white);
+  text-decoration: none;
+}
+.interest-text {
+  max-width: 43ch;
+  color: #cccfca;
+  font-size: 14px;
+}
+.interest-visual {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  max-width: 600px;
+  justify-self: center;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #090b0c;
+}
+.interest-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.interest--reverse .interest-copy {
+  grid-column: 2;
+  grid-row: 1;
+}
+.interest--reverse .interest-visual {
+  grid-column: 1;
+  grid-row: 1;
+}
+.interest--text-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+.interest--text-only .interest-copy {
+  grid-column: 1;
+  grid-row: auto;
+  width: 100%;
+  max-width: 820px;
+  margin-inline: auto;
+}
+.interest-viewfinder {
+  --corner-length: 24px;
+  position: absolute;
+  inset: 15px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--white), var(--white)) left top / var(--corner-length) 1px,
+    linear-gradient(var(--white), var(--white)) left top / 1px var(--corner-length),
+    linear-gradient(var(--white), var(--white)) right top / var(--corner-length) 1px,
+    linear-gradient(var(--white), var(--white)) right top / 1px var(--corner-length),
+    linear-gradient(var(--white), var(--white)) left bottom / var(--corner-length) 1px,
+    linear-gradient(var(--white), var(--white)) left bottom / 1px var(--corner-length),
+    linear-gradient(var(--white), var(--white)) right bottom / var(--corner-length) 1px,
+    linear-gradient(var(--white), var(--white)) right bottom / 1px var(--corner-length);
+  background-repeat: no-repeat;
+}
+/* Only the successfully initialized scroll controller hides content. */
+.scroll-story .interest h2 {
+  opacity: var(--interest-heading, 1);
+  transform: translate3d(var(--interest-copy-x, 0px), 0, 0);
+}
+.scroll-story .interest-number {
+  opacity: var(--interest-heading, 1);
+}
+.scroll-story .interest-text {
+  opacity: var(--interest-text, 1);
+  transform: translate3d(var(--interest-copy-x, 0px), var(--interest-text-y, 0px), 0);
+}
+.scroll-story .interest-visual {
+  opacity: var(--interest-image, 1);
+  transform: translate3d(var(--interest-image-x, 0px), 0, 0);
+}
+.scroll-story .interest--horror .interest-visual img {
+  filter: brightness(var(--interest-light, 1));
+}
+.scroll-story .interest-viewfinder {
+  --corner-length: calc(24px * var(--interest-corners, 1));
+  opacity: var(--interest-corners, 1);
+}
+@media (max-width: 700px) {
+  .interests {
+    padding-top: 70px;
+    padding-bottom: 24px;
+  }
+  .interest-eyebrow {
+    margin-bottom: 8px;
+  }
+  .interest {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 27px;
+    padding: 64px 0;
+  }
+  .interest--reverse .interest-copy,
+  .interest--reverse .interest-visual {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .interest h2 {
+    font-size: clamp(39px, 9.5vw, 62px);
+    margin-bottom: 20px;
+  }
+  .interest-number {
+    margin-bottom: 14px;
+  }
+  .interest-text {
+    max-width: 48ch;
+    font-size: 13px;
+  }
+}
+@media print, (prefers-reduced-motion: reduce) {
+  .scroll-story .interest h2,
+  .scroll-story .interest-number,
+  .scroll-story .interest-text,
+  .scroll-story .interest-visual,
+  .scroll-story .interest-viewfinder {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .scroll-story .interest--horror .interest-visual img {
+    filter: none !important;
+  }
+  .scroll-story .interest-viewfinder {
+    --corner-length: 24px;
+  }
+}
+
+.about {
+  display: grid;
+  gap: clamp(32px, 6vw, 90px);
+  align-items: center;
+  padding: 110px max(var(--pad), calc((100% - 1240px) / 2));
+  border-top: 1px solid var(--line);
+  background: #121313;
+}
+.about-with-media {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+.about-copy {
+  max-width: 820px;
+}
+.about h2 {
+  font: 800 clamp(64px, 7vw, 112px)/0.95 'Barlow Condensed', Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+  margin-bottom: 28px;
+}
+.about-text {
+  max-width: 50ch;
+  color: #cccfca;
+  font-size: 15px;
+}
+.about-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 26px 0 0;
+  list-style: none;
+}
+.about-tools li {
+  padding: 8px 11px;
+  border: 1px solid var(--line);
+  font: 9px/1.5 'IBM Plex Mono', monospace;
+  color: #b9bcb7;
+}
+.about .button {
+  margin-top: 30px;
+}
+.about-media {
+  min-width: 0;
+}
+.about-image {
+  display: block;
+  width: 100%;
+  max-width: 650px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+/* ==================================================
+   08 / Interaktive 3D-Modelle mit Standbild und Bedienelementen
+   ================================================== */
+
+.model-stage {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  background: #0b0d0e;
+  border: 1px solid var(--line);
+}
+.model-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 260px;
+  max-height: 65svh;
+  overflow: hidden;
+}
+.model-poster,
+.model-canvas model-viewer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.model-poster {
+  object-fit: contain;
+}
+.model-canvas model-viewer {
+  opacity: 0;
+  --progress-bar-color: var(--red);
+  --poster-color: transparent;
+}
+.is-ready .model-canvas model-viewer {
+  opacity: 1;
+}
+.is-ready .model-poster {
+  opacity: 0;
+  pointer-events: none;
+}
+.model-placeholder {
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse at 60% 60%, #382021, #0b0d0e 70%);
+}
+.model-placeholder span {
+  font: 800 clamp(100px, 13vw, 210px)/1 'Barlow Condensed', Impact, sans-serif;
+  color: #ffffff0d;
+}
+.model-placeholder i {
+  position: absolute;
+  width: 40%;
+  aspect-ratio: 1;
+  border: 1px solid #f032353d;
+  transform: rotate(30deg) skew(-10deg);
+}
+.model-overlay {
+  display: none;
+  position: absolute;
+  inset: 0 0 46px;
+  place-items: center;
+  pointer-events: none;
+}
+.js .model-overlay {
+  display: grid;
+}
+.model-overlay .model-start {
+  margin: 0;
+  pointer-events: auto;
+  background: #101111e6;
+}
+.model-start:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.is-ready .model-overlay {
+  display: none;
+}
+.model-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 46px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  font: 9px/1.6 'IBM Plex Mono', monospace;
+  color: #c2c5bf;
+}
+.model-motion {
+  flex-shrink: 0;
+  border: 1px solid #ffffff50;
+  padding: 6px 10px;
+  background: transparent;
+  font: inherit;
+}
+.model-motion:hover {
+  background: #ffffff12;
+}
+.has-error .model-status {
+  color: #ffb6b7;
+}
+.model-nojs {
+  padding: 14px;
+  font-size: 12px;
+}
+.model-nojs a {
+  text-decoration: underline;
+}
+.detail-gallery .model-stage {
+  border: 0;
+}
+.detail-gallery .model-poster {
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+}
+.detail-gallery .model-canvas {
+  min-height: 230px;
+}
+.detail-media > .model-stage {
+  flex: 1;
+}
+
+/* ==================================================
+   09 / Kontaktbereich und roter Farbverlauf
+   ================================================== */
+
+.contact {
+  padding: calc(var(--head) + 30px) var(--pad) 0;
+  min-height: 85svh;
+  position: relative;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(
+    to bottom,
+    #101111 0%,
+    #171011 18%,
+    #49171b 42%,
+    #a42129 70%,
+    #f03235 100%
+  );
+}
+.contact-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 45px;
+  gap: 25px;
+}
+.contact-top > p:last-child {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #e9dddc;
+}
+.contact h2 {
+  position: relative;
+  font:
+    800 clamp(72px, 14vw, 210px)/0.9 'Barlow Condensed',
+    Impact,
+    sans-serif;
+  letter-spacing: -0.02em;
+  margin-bottom: 45px;
+}
+.contact-arrow {
+  position: absolute;
+  right: 0;
+  top: -0.12em;
+  font:
+    400 12vw/1 Inter,
+    sans-serif;
+  color: var(--white);
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 7vw;
+  align-items: start;
+  margin-bottom: 70px;
+}
+.contact-description p {
+  max-width: 32ch;
+  color: #f1e8e7;
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+/* ==================================================
+   10 / E-Mail: Titelschrift, weisser Rahmen und schwarzer Hover
+   ================================================== */
+
+.contact .email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  max-width: 100%;
+  padding: 14px 20px;
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-weight: 800;
+  font-size: clamp(22px, 2vw, 32px);
+  line-height: 1.2;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  color: #ffffff;
+  background: transparent;
+  border: 1px solid #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+.contact .email-link::after {
+  content: '↗';
+  flex-shrink: 0;
+}
+
+.contact .email-link:hover,
+.contact .email-link:focus-visible {
+  background: #000000;
+}
+
+/* ==================================================
+   11 / Kontaktformular
+   ================================================== */
+
+.contact-form {
+  display: grid;
+  gap: 18px;
+}
+.contact-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font:
+    10px/1.6 'IBM Plex Mono',
+    monospace;
+}
+.contact-form input:not([type='checkbox']),
+.contact-form textarea {
+  width: 100%;
+  padding: 13px 12px;
+  border: 1px solid #ffffff70;
+  background: #0f11112b;
+  font:
+    14px/1.5 Inter,
+    Arial,
+    sans-serif;
+  border-radius: 0;
+}
+.contact-form textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+.form-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.contact-form .consent {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 9px;
+  line-height: 1.8;
+}
+.consent input {
+  margin-top: 4px;
+  accent-color: var(--bg);
+}
+.consent a {
+  text-decoration: underline;
+}
+.contact-form .button {
+  justify-self: start;
+}
+.contact .button:hover {
+  background: #101111;
+  border-color: #101111;
+}
+.form-feedback {
+  padding: 15px;
+  border: 1px solid #ffffff70;
+  background: #10111177;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ==================================================
+   12 / Footer
+   ================================================== */
+
+.contact footer {
+  padding: 26px 0;
+  border-top: 1px solid #10111150;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  color: #171111;
+}
+.contact .footer-home > span,
+.contact .footer-fish .footer-brand-dot {
+  color: var(--white);
+}
+.contact footer > span:not(.footer-mark),
+.contact footer nav {
+  font:
+    9px/1.7 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 1px;
+}
+.contact footer nav {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.contact footer nav a:hover {
+  text-decoration: underline;
+}
+.footer-mark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 48px;
+}
+.footer-fish {
+  --fish-duration: 2.3s;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 64px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.footer-fish:focus-visible {
+  outline-color: var(--white);
+}
+.footer-fish .footer-name-mask,
+.footer-fish .footer-brand-name {
+  display: block;
+  color: inherit;
+}
+.footer-name-mask {
+  overflow: hidden;
+  padding: 4px 1px;
+}
+.footer-brand-name {
+  transition: color .15s ease;
+}
+.footer-fish:hover .footer-brand-name {
+  color: var(--white);
+}
+.footer-fish-stage {
+  position: absolute;
+  left: -10px;
+  bottom: 0;
+  width: 144px;
+  height: 156px;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.footer-fish-jump {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  width: 106px;
+  height: 82px;
+  transform: translate3d(0, 115%, 0) rotate(-22deg);
+  transform-origin: 50% 65%;
+}
+.footer-fish-jump img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.footer-fish.is-playing .footer-fish-stage {
+  visibility: visible;
+}
+.footer-fish.is-playing .footer-brand-name {
+  animation: fex-name-dive var(--fish-duration) both;
+}
+.footer-fish.is-playing .footer-fish-jump {
+  animation: fex-fish-jump var(--fish-duration) both;
+}
+@keyframes fex-name-dive {
+  0% { transform: translateY(0); animation-timing-function: cubic-bezier(.55, .06, .68, .19); }
+  14%, 79% { transform: translateY(130%); animation-timing-function: cubic-bezier(.22, .61, .36, 1); }
+  100% { transform: translateY(0); }
+}
+@keyframes fex-fish-jump {
+  0%, 19% { transform: translate3d(0, 115%, 0) rotate(-22deg); animation-timing-function: cubic-bezier(.22, .61, .36, 1); }
+  47% { transform: translate3d(8px, -70px, 0) rotate(-12deg); animation-timing-function: ease-in-out; }
+  53% { transform: translate3d(12px, -70px, 0) rotate(12deg); animation-timing-function: cubic-bezier(.55, .06, .68, .19); }
+  78%, 100% { transform: translate3d(18px, 115%, 0) rotate(38deg); }
+}
+@keyframes fex-name-fade {
+  0%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+@keyframes fex-fish-fade {
+  0%, 15%, 85%, 100% { opacity: 0; }
+  35%, 65% { opacity: 1; }
+}
+
+/* ==================================================
+   13 / Projektfenster und unscharfer Hintergrund
+   ================================================== */
+
+dialog {
+  width: min(950px, 92vw);
+  max-height: 90svh;
+  padding: 0;
+  border: 1px solid #ffffff40;
+  background: #171919;
+  color: var(--white);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red) #151515;
+}
+dialog::backdrop {
+  background: #0009;
+  backdrop-filter: blur(12px);
+}
+.close {
+  position: sticky;
+  float: right;
+  top: 12px;
+  margin: 12px 12px -54px 0;
+  z-index: 5;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #ffffff60;
+  background: #101111dd;
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* ==================================================
+   14 / Medien und Texte in der Projektansicht
+   ================================================== */
+
+.detail-media {
+  background: #080909;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+.detail-media > video,
+.detail-media > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 65svh;
+  object-fit: contain;
+}
+.detail-copy {
+  padding: 35px;
+}
+.project-loading {
+  min-height: 220px;
+  padding: 54px 35px;
+}
+.project-loading p {
+  margin-bottom: 22px;
+}
+.detail-title {
+  font:
+    700 clamp(40px, 6vw, 75px)/1 'Barlow Condensed',
+    Impact,
+    sans-serif;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  overflow-wrap: anywhere;
+}
+.detail-subtitle {
+  color: var(--muted);
+  font:
+    10px/1.8 'IBM Plex Mono',
+    monospace;
+  margin-bottom: 24px;
+}
+.prose {
+  font-size: 14px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.prose > * + * {
+  margin-top: 18px;
+}
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose ul,
+.prose ol {
+  padding-left: 25px;
+}
+.prose h2,
+.prose h3 {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  line-height: 1.2;
+}
+.detail-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 30px;
+}
+.detail-gallery figure {
+  margin: 0;
+  background: #101111;
+  border: 1px solid var(--line);
+  min-width: 0;
+}
+.detail-gallery img,
+.detail-gallery video {
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+  background: #e8e8e6;
+}
+.detail-gallery video {
+  background: #080909;
+}
+.detail-gallery figcaption {
+  padding: 12px;
+  font:
+    10px/1.7 'IBM Plex Mono',
+    monospace;
+  color: #bbb;
+}
+.document-link {
+  display: block;
+  padding: 20px;
+  font:
+    11px/1.7 'IBM Plex Mono',
+    monospace;
+}
+.document-link:hover {
+  color: var(--red);
+}
+
+/* ==================================================
+   15 / Einzelne Projektseiten und Inhaltsseiten
+   ================================================== */
+
+.standalone {
+  max-width: 1100px;
+  padding: calc(var(--head) + var(--admin-offset) + 60px) var(--pad) 70px;
+  margin: auto;
+  min-height: 50vh;
+}
+.standalone .work-detail {
+  border: 1px solid var(--line);
+}
+.back-link {
+  display: inline-block;
+  font:
+    11px 'IBM Plex Mono',
+    monospace;
+  margin-bottom: 30px;
+}
+.prose-page h1 {
+  font-size: clamp(45px, 7vw, 95px);
+  line-height: 1;
+  margin-bottom: 40px;
+}
+.prose-page [data-module] {
+  margin-top: 30px;
+}
+.page-image img {
+  display: block;
+  max-height: 70vh;
+  object-fit: contain;
+  margin: 0 auto 25px;
+}
+.empty-state {
+  padding: 70px var(--pad);
+  border-top: 1px solid var(--line);
+}
+.empty-state h2 {
+  font:
+    700 60px 'Barlow Condensed',
+    Impact,
+    sans-serif;
+}
+.empty-state p {
+  margin-top: 20px;
+  line-height: 1.8;
+}
+
+/* ==================================================
+   16 / WordPress-Adminleiste auf kleineren Bildschirmen
+   ================================================== */
+
+@media (max-width: 782px) {
+  body.admin-bar {
+    --admin-offset: 46px;
+  }
+}
+
+/* ==================================================
+   17 / Smartphone-Ansicht
+   ================================================== */
+
+@media (max-width: 700px) {
+  :root {
+    --head: 64px;
+    --pad: 6vw;
+  }
+  .site-header nav {
+    gap: 21px;
+    font-size: 11px;
+  }
+  .logo {
+    font-size: 32px;
+  }
+  .hero {
+    min-height: 600px;
+  }
+  .hero-copy {
+    padding-top: 26vh;
+  }
+  .hero-art {
+    width: 100%;
+    opacity: 0.7;
+    mask-image: none;
+  }
+  .hero-shade {
+    background:
+      linear-gradient(90deg, #101111a0, #10111120),
+      linear-gradient(0deg, #101111, transparent 60%);
+  }
+  h1 {
+    font-size: clamp(64px, 14.3vw, 102px);
+  }
+  .hero .intro {
+    max-width: 34ch;
+    font-size: 12px;
+  }
+  .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+  }
+  .hero-bottom {
+    font-size: 8px;
+  }
+  .hero-bottom .right-label {
+    display: none;
+  }
+  .hero-bottom > a {
+    max-width: 155px;
+    text-align: right;
+    line-height: 1.8;
+  }
+  .project-row {
+    padding-top: 38px;
+  }
+  .section-head {
+    display: block;
+    margin-bottom: 24px;
+  }
+  .section-head h2 {
+    font-size: 9vw;
+  }
+  .section-note {
+    max-width: none;
+    text-align: left;
+    margin-top: 14px;
+    font-size: 8px;
+  }
+  .track {
+    gap: 14px;
+  }
+  .project {
+    width: 82vw;
+  }
+  .project-img {
+    aspect-ratio: 16 / 10;
+  }
+  .caption h3 {
+    font-size: 25px;
+  }
+  .caption p {
+    font-size: 9px;
+  }
+  .image-index {
+    font-size: 8px;
+    left: 16px;
+    bottom: 16px;
+  }
+  .media-label {
+    top: 10px;
+    right: 10px;
+    padding: 8px;
+    font-size: 7px;
+  }
+  .section-foot {
+    gap: 12px;
+    font-size: 8px;
+  }
+  .gallery-controls button {
+    padding: 9px 11px;
+    font-size: 9px;
+  }
+  .gallery-hint {
+    display: none;
+  }
+  .contact {
+    padding-top: 70px;
+  }
+  .about {
+    grid-template-columns: 1fr;
+    padding: 64px var(--pad);
+    gap: 36px;
+  }
+  .about h2 {
+    font-size: clamp(58px, 14vw, 86px);
+  }
+  .about-text {
+    font-size: 13px;
+  }
+  .about-image {
+    max-height: 480px;
+  }
+  .model-toolbar {
+    flex-wrap: wrap;
+  }
+  .contact-top {
+    display: block;
+    margin-bottom: 35px;
+  }
+  .contact-top > p:last-child {
+    font-size: 11px;
+    margin-top: 20px;
+  }
+  .contact h2 {
+    font-size: 19vw;
+  }
+  .contact-arrow {
+    font-size: 14vw;
+    top: 0;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+  .contact-description p {
+    max-width: none;
+  }
+  .form-pair {
+    grid-template-columns: 1fr;
+  }
+  .contact footer {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .contact footer > span:not(.footer-mark),
+  .contact footer nav {
+    font-size: 8px;
+  }
+  .contact footer > span:not(.footer-mark) {
+    order: 3;
+    flex-basis: 100%;
+  }
+  .contact footer nav {
+    margin-left: auto;
+    gap: 12px;
+  }
+  .detail-copy {
+    padding: 25px;
+  }
+  .detail-gallery {
+    grid-template-columns: 1fr;
+  }
+  .detail-gallery img {
+    height: auto;
+    max-height: 65svh;
+  }
+  .detail-title {
+    font-size: 42px;
+  }
+}
+
+/* ==================================================
+   18 / Reduzierte Bewegung
+   ================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .card-media,
+  .card-preview,
+  .button,
+  .contact .email-link {
+    transition: none;
+  }
+  .footer-brand-name {
+    transition: none;
+  }
+  .footer-fish {
+    --fish-duration: 1s;
+  }
+  .footer-fish.is-playing .footer-brand-name {
+    animation-name: fex-name-fade;
+  }
+  .footer-fish.is-playing .footer-fish-jump {
+    transform: translate3d(0, -26px, 0);
+    animation-name: fex-fish-fade;
+  }
+  .project:hover .card-media {
+    transform: none;
+  }
+  .cursor-preview,
+  .hero-glow {
+    display: none;
+  }
+  .hero-art,
+  .motion-arrows .button > span,
+  .motion-arrows .email-link::after,
+  .motion-arrows .project .open {
+    transform: none !important;
+    transition: none !important;
+  }
+}

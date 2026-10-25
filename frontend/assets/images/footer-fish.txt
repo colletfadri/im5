@@ -1,0 +1,9 @@
+Fischgrafik für die Footer-Animation, Version 1.1.2
+
+Datei: frontend/assets/images/footer-fish.png
+Ausgangsmaterial: vom Nutzer gelieferte Cartoon-Fischvorlage 1000020422.png.
+Vorbereitet mit der integrierten Imagegen-Bildbearbeitung, transparenter Hintergrund.
+Die Animation selbst wird mit CSS und JavaScript erzeugt.
+
+Verwendeter Prompt:
+Use case: background-extraction. Asset type: small transparent PNG sprite for a website footer Easter egg. Input image 1 is the edit target. Isolate ONLY the large cute orange cartoon fish from the provided image. Preserve its smiling face, navy thick outline, orange fins, cream stripe and pale cyan belly, and its upward-right facing pose. Complete any tiny cropped fin/tail edge so the entire fish fits with a little clear padding on all sides. Remove the white background, border, all floating bubbles and speed lines. Genuine transparent alpha background, no shadow, no text, no new objects. One fish only, crisp clean edges and a fully visible silhouette.
